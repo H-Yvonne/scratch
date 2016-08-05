@@ -27,34 +27,36 @@
     </head>
     <body>
         <div class="card-wrap">
-            <div class="card-inner">
-                <!-- <img src="/images/test.jpg" width="100%" height="100%" />
-                <p>谢谢参与</p>
-                <canvas id="myCanvas" class="card-canvas" width="544" height="310"></canvas> -->
-                
-            </div>
+            <div class="card-inner"></div>
             <button>111</button>
         </div>
     </body>
 </html>
-<script type="text/javascript" src="/js/libs/jquery.js"></script>
-<script type="text/javascript" src="/js/lottery/index.js"></script>
+<script type="text/javascript" src="./js/lottery/index.js"></script>
 <script type="text/javascript">
     var lott = new lottery({
         mainWrap: '.card-inner',    //装在canvas容器
         canvasName: 'card-canvas',  //canvas类名
-        logoUrl: '/images/card-bg.png',
+        logoUrl: './images/card-bg.png',
         initTxt: '刮奖区',
         startFn: function () {
-            $('div.card-inner').append('<img src="/images/test.jpg" width="100%" height="100%" />');
-        },     //movestart开始方法，获取奖品ajax并且插入内容到canvas图层下
+            var img = document.createElement('img');
+            img.src = './images/test.jpg';
+            img.width = document.querySelector('.card-inner').clientWidth;
+            img.height = document.querySelector('.card-inner').clientHeight;
+            document.querySelector('.card-inner').appendChild(img);
+        }, 
         endFn: function () {
             console.log(2);
         }
     });
-    $('button').on('click', function () {
+    document.getElementsByTagName('button')[0].addEventListener('click', function () {
         lott.init(function () {
-            $('div.card-inner').append('<img src="/images/test1.jpg" width="100%" height="100%" />');
+            var img = document.createElement('img');
+            img.src = './images/test1.jpg';
+            img.width = document.querySelector('.card-inner').clientWidth;
+            img.height = document.querySelector('.card-inner').clientHeight;
+            document.querySelector('.card-inner').appendChild(img);
         })
     });
 </script>
