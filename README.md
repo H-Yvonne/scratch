@@ -16,27 +16,35 @@ Example
 引入样式文件，js文件
 ```
 可以自定义外框的一些基本样式（位置、边框等）
-<script type="text/javascript" src="/js/libs/jquery.js"></script>
+没有依赖jq库，为了方便操作dom您也可自行依赖
 <script type="text/javascript" src="/js/lottery/index.js"></script>
 ```
 实现下拉
 ```
 <script type="text/javascript">
     var lott = new lottery({
-        mainWrap: '.card-inner',
-        canvasName: 'card-canvas',
-        logoUrl: '/images/card-bg.png',
+        mainWrap: '.card-inner',    //装在canvas容器
+        canvasName: 'card-canvas',  //canvas类名
+        logoUrl: './images/card-bg.png',
         initTxt: '刮奖区',
         startFn: function () {
-            $('div.card-inner').append('<img src="/images/test.jpg" width="100%" height="100%" />');
-        },
+            var img = document.createElement('img');
+            img.src = './images/test.jpg';
+            img.width = document.querySelector('.card-inner').clientWidth;
+            img.height = document.querySelector('.card-inner').clientHeight;
+            document.querySelector('.card-inner').appendChild(img);
+        }, 
         endFn: function () {
             console.log(2);
         }
     });
-    $('button').on('click', function () {
+    document.getElementsByTagName('button')[0].addEventListener('click', function () {
         lott.init(function () {
-            $('div.card-inner').append('<img src="/images/test1.jpg" width="100%" height="100%" />');
+            var img = document.createElement('img');
+            img.src = './images/test1.jpg';
+            img.width = document.querySelector('.card-inner').clientWidth;
+            img.height = document.querySelector('.card-inner').clientHeight;
+            document.querySelector('.card-inner').appendChild(img);
         })
     });
 </script>
