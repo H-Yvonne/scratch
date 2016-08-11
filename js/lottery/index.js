@@ -36,6 +36,7 @@
             this.ele = document.createElement('canvas');
             this.ele.className = this.canvasName;
             this.resizeCanvas();
+            this.ready && this.ready();
         },
         //resize canvas
         resizeCanvas: function () {
