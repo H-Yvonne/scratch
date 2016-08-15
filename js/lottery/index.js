@@ -33,9 +33,8 @@
             this.ele = document.createElement('canvas');
             this.ele.className = this.canvasName;
             this.resizeCanvas();
-            this.ready && this.ready();  //ready方法
+            this.ready && this.ready();
         },
-        //scale canvas
         adjustRatio: function(ctx) {
             var backingStore = ctx.backingStorePixelRatio ||
                 ctx.webkitBackingStorePixelRatio ||
