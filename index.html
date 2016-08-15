@@ -53,12 +53,14 @@
         }
     });
     document.getElementsByTagName('button')[0].addEventListener('click', function () {
-        lott.init(function () {
-            var img = document.createElement('img');
-            img.src = './images/test1.jpg';
-            img.width = document.querySelector('.card-inner').clientWidth;
-            img.height = document.querySelector('.card-inner').clientHeight;
-            document.querySelector('.card-inner').appendChild(img);
-        })
+        lott.init({
+            startFn: function () {
+                var img = document.createElement('img');
+                img.src = './images/test1.jpg';
+                img.width = document.querySelector('.card-inner').clientWidth;
+                img.height = document.querySelector('.card-inner').clientHeight;
+                document.querySelector('.card-inner').appendChild(img);
+            }
+        });
     });
 </script>
