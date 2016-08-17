@@ -18,22 +18,24 @@
         this.init(config);
     }
     Lottery.prototype = {
-        mainWrap: '',    //装在canvas容器
-        canvasName: '',  //canvas类名
-        logoUrl: '',
-        initTxt: '刮奖区',
-        percent: 0.3,    //刮百分之多少自动显示
-        startFn: '',
-        endFn: '',       //刮奖后方法
-        canEve: true,    //是否可以刮奖
-
+        config: {
+            mainWrap: '',    //装在canvas容器
+            canvasName: '',  //canvas类名
+            logoUrl: '',
+            initTxt: '刮奖区',
+            percent: 0.3,    //刮百分之多少自动显示
+            ready: '',
+            startFn: '',
+            endFn: '',       //刮奖后方法
+            canEve: true,    //是否可以刮奖
+        },
         //create element
         createElement: function () {
-            document.querySelector(this.mainWrap).innerHTML = '';
+            document.querySelector(this.config.mainWrap).innerHTML = '';
             this.ele = document.createElement('canvas');
-            this.ele.className = this.canvasName;
+            this.ele.className = this.config.canvasName;
             this.resizeCanvas();
-            this.ready && this.ready();
+            this.config.ready && this.config.ready();
         },
         adjustRatio: function(ctx) {
             var backingStore = ctx.backingStorePixelRatio ||
@@ -52,16 +54,16 @@
         //resize canvas
         resizeCanvas: function () {
             this.size = {
-                w: document.querySelector(this.mainWrap).clientWidth,
-                h: document.querySelector(this.mainWrap).clientHeight
+                w: document.querySelector(this.config.mainWrap).clientWidth,
+                h: document.querySelector(this.config.mainWrap).clientHeight
             }
-            document.querySelector(this.mainWrap).appendChild(this.ele);
+            document.querySelector(this.config.mainWrap).appendChild(this.ele);
             this.ctx = this.ele.getContext('2d');
             this.ctx.save();
             this.adjustRatio(this.ctx);
             this.ctx.restore();
             this.setCanvasBg();
-            if(this.canEve) {
+            if(this.config.canEve) {
                 this.bindEvent();
             }
         },
@@ -71,7 +73,7 @@
             this.ctx.fillStyle = '#aaa';
             this.ctx.fillRect(0,0,this.size.w,this.size.h);
             this.ctx.closePath();
-            if(this.logoUrl && this.initTxt) {
+            if(this.config.logoUrl && this.config.initTxt) {
                 this.setLogo();
                 return;
             }
@@ -81,8 +83,8 @@
         },
         setLogo: function () {
             var _self = this;
-            if(_self.logoUrl) {
-                _self.preImage(_self.logoUrl, function () {
+            if(_self.config.logoUrl) {
+                _self.preImage(_self.config.logoUrl, function () {
                     _self.ctx.globalCompositeOperation='source-over';
                     _self.ctx.drawImage(this,0,0,_self.size.w,_self.size.h);
                     _self.setText();
@@ -90,10 +92,10 @@
             }
         },
         setText: function () {
-            if(this.initTxt) {
+            if(this.config.initTxt) {
                 this.ctx.globalCompositeOperation='lighter';
                 this.ctx.font="18px Microsoft YaHei";
-                var text = this.initTxt;
+                var text = this.config.initTxt;
                 this.ctx.fillText(text,(this.size.w-this.ctx.measureText(text).width)/2,(this.size.h)/2);
             }
         },
@@ -112,14 +114,14 @@
             this.ele.addEventListener(clickEvtName, function (e) {
                 e.preventDefault();
                 isMouseDown = true;
-                if(typeof this.startFn === 'function') this.startFn();
+                if(typeof this.config.startFn === 'function') this.config.startFn();
                 this.ctx.strokeStyle = "#f00";
                 this.ctx.lineCap = "round";
                 this.ctx.lineJoin="round";
                 this.ctx.lineWidth = 20;
                 this.ctx.beginPath();
-                var x = (device ? e.targetTouches[0].clientX : e.clientX) + document.body.scrollLeft - document.querySelector(this.mainWrap).getBoundingClientRect().left;
-                var y = (device ? e.targetTouches[0].clientY : e.clientY) + document.body.scrollTop - document.querySelector(this.mainWrap).getBoundingClientRect().top;
+                var x = (device ? e.targetTouches[0].clientX : e.clientX) + document.body.scrollLeft - document.querySelector(this.config.mainWrap).getBoundingClientRect().left;
+                var y = (device ? e.targetTouches[0].clientY : e.clientY) + document.body.scrollTop - document.querySelector(this.config.mainWrap).getBoundingClientRect().top;
                 this.ctx.moveTo(x, y);
             }.bind(this),false);
 
@@ -129,8 +131,8 @@
                     return false;
                 }
                 this.ctx.globalCompositeOperation='destination-out';
-                var x = (device ? e.targetTouches[0].clientX : e.clientX) + document.body.scrollLeft - document.querySelector(this.mainWrap).getBoundingClientRect().left;
-                var y = (device ? e.targetTouches[0].clientY : e.clientY) + document.body.scrollTop - document.querySelector(this.mainWrap).getBoundingClientRect().top;
+                var x = (device ? e.targetTouches[0].clientX : e.clientX) + document.body.scrollLeft - document.querySelector(this.config.mainWrap).getBoundingClientRect().left;
+                var y = (device ? e.targetTouches[0].clientY : e.clientY) + document.body.scrollTop - document.querySelector(this.config.mainWrap).getBoundingClientRect().top;
                 this.ctx.lineTo(x, y);
                 this.ctx.stroke();
             }.bind(this),false);
@@ -144,7 +146,7 @@
                         num++;
                     }
                 };
-                if(num >= datas.data.length*this.percent) {
+                if(num >= datas.data.length*this.config.percent) {
                     n = 10;
                     var time = setInterval(function(){
                         if(n > 0){ 
@@ -153,8 +155,8 @@
                         }else{ 
                             clearTimeout(time); 
                             this.ctx.clearRect(0,0,this.size.w,this.size.h);
-                            document.querySelector(this.mainWrap).removeChild(this.ele);
-                            if(typeof this.endFn === 'function') this.endFn();
+                            document.querySelector(this.config.mainWrap).removeChild(this.ele);
+                            if(typeof this.config.endFn === 'function') this.config.endFn();
                         }
                     }.bind(this),30);
                 }
@@ -180,7 +182,7 @@
         init: function (config) {
             var o;
             for(o in config) {
-                this[o] = config[o];
+                this.config[o] = config[o];
             }
             this.drawLottery();
         }
