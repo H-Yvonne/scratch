@@ -19,7 +19,7 @@ Example
 没有依赖jq库，为了方便操作dom您也可自行依赖
 <script type="text/javascript" src="/js/lottery/index.js"></script>
 ```
-实现下拉
+方法调用
 ```
 <script type="text/javascript">
     var lott = new lottery({
